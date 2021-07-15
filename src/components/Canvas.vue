@@ -1,6 +1,6 @@
 <template>
     <div>
-        {{ canvasID }}
+        {{ canvasID }} {{ scope }}
         <canvas :id="canvasID" class="canvas-style" v-on:mousedown="mouseDown" />
     </div>
 </template>
@@ -13,19 +13,28 @@
         data() {
             return {
                 path: null,
-                scope: null
+                scope: null,
+                friction: 0.8,
+                timeStep: 0.01,
+                amount: 15,
+                mass: 2,
+                count: 0
             }
         },
+        mounted() {
+            this.scope = new paper.PaperScope();
+            this.scope.setup(this.canvasID);
+        },
         methods: {
-            reset() {
-                this.scope.project.activeLayer.removeChildren();
-            },
+            // reset() {
+            //     this.scope.project.activeLayer.removeChildren();
+            // },
             pathCreate(scope) {
                 scope.activate();
                 return new paper.Path({
                     strokeColor: "#000000",
                     strokeJoin: 'round',
-                    strokeWidth: 2
+                    strokeWidth: 4
                 })
             },
             createTool(scope) {
@@ -35,27 +44,25 @@
             mouseDown() {
                 console.log('f');
                 // in order to access functions in nested tool
-                let self = this;
+                let vm = this;
                 // create drawing tool
                 this.tool = this.createTool(this.scope);
                 this.tool.onMouseDown = (event) => {
+                    console.log('f');
                     // init path
-                    self.path = self.pathCreate(self.scope);
+                    vm.path = vm.pathCreate(vm.scope);
                     // add point to path
-                    self.path.add(event.point);
+                    vm.path.add(event.point);
+
                 };
                 this.tool.onMouseDrag = (event) => {
-                    self.path.add(event);
+                    vm.path.add(event);
                 };
                 this.tool.onMouseUp = (event) => {
                     // line completed
-                    self.path.add(event.point);
+                    vm.path.add(event.point);
                 }
             }
-        },
-        mounted() {
-            this.scope = new paper.PaperScope();
-            this.scope.setup(this.canvasId);
         }
     }
 </script>

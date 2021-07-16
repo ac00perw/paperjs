@@ -13,12 +13,7 @@
         data() {
             return {
                 path: null,
-                scope: null,
-                friction: 0.8,
-                timeStep: 0.01,
-                amount: 15,
-                mass: 2,
-                count: 0
+                scope: null
             }
         },
         mounted() {

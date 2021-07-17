@@ -1,10 +1,11 @@
 <template>
     <div class="home">
-        <h1>Lava or waves</h1>
+        <h1 class="text-4xl">Lava or waves</h1>
         <canvas class="canvas-style" ref="c3" @mousemove="mouseMove" />
         <div class="underneath">
           <div class="para">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+          <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>
           </div>
         </div>
     </div>
@@ -22,7 +23,7 @@ export default {
             tool: null,
             paper: null,
             path: null,
-            points: 4,
+            points: 14,
             width: 0,
             height: 0,
             center: null
@@ -50,28 +51,30 @@ export default {
             vm
             vm.path = new paper.Path({
                 fillColor: '#99cc99',
+                strokeColor: '#99cc99',
+                strokeWidth: '4',
                 closed: false
             });
             vm.path.segments = [];
-            vm.path.add(0, vm.height - 10);
+            vm.path.add(0, vm.height);
+            vm.path.add(0, vm.height/2);
             console.log(vm.paper.view.bounds.bottomLeft);
 
             for (var i = 1; i < vm.points; i++) {
-                var point = new paper.Point(vm.width / vm.points * i, 0);
+                var point = new paper.Point(vm.width / vm.points * i, vm.height/2);
                 vm.path.add(point);
             }
-            vm.path.add(vm.width, vm.height - 10)
-            var rect = new paper.Shape.Rectangle(new paper.Point(0, vm.height - 10), new paper.Point(vm.width, vm.height))
-            rect.fillColor = new paper.Color(.6, .8, .6);
+            vm.path.add(vm.width, vm.height/2)
+            vm.path.add(vm.width, vm.height)
             vm.paper.view.onFrame = (e) => vm.onFrame(e);
         },
         onFrame(event) {
             var vm = this;
-            vm.pathHeight += (vm.center.y - (120) - vm.pathHeight) / 10;
+            vm.pathHeight += (vm.center.y - (10) - (vm.pathHeight)) / 10;
             for (var i = 1; i < vm.points; i++) {
                 var sinSeed = event.count + (i + i % 10) * 100;
-                var sinHeight = Math.sin(sinSeed / 300) * vm.pathHeight;
-                var yPos = Math.sin(sinSeed / 100) * sinHeight + (vm.height);
+                var sinHeight = Math.sin(sinSeed / 100) * vm.pathHeight;
+                var yPos = Math.sin(sinSeed / 200) * sinHeight + (vm.height/2);
                 vm.path.segments[i].point.y = yPos;
             }
             vm.path.smooth({ type: 'continuous' });
@@ -96,7 +99,7 @@ export default {
     width: 100% !important;
     height: 100px !important;
     display: block;
-    margin: auto;
+    margin: 0 auto;
 }
 .underneath {
   width:  100%;
@@ -110,5 +113,6 @@ export default {
   max-width:  400px;
   margin:  0 auto;
   padding-top:  20px;
+  @apply text-white font-bold;
 }
 </style>

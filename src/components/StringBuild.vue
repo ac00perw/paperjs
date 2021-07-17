@@ -1,10 +1,11 @@
 <template>
     <div>
-        {{ mouse }}
+        
         <canvas :id="canvasID" class="canvas-style" @mousemove="mouseMove" />
-        <ul v-if="path">
-            <li>{{ size }}</li>
-            <li>SEGS</li>
+        <button class="bg-gray-400 text-white p-2 rounded-md my-2" @click="showTest = (showTest == true? false: true)"><span v-if="showTest">Hide</span><span v-else>Show</span> Stats</button>
+        <ul v-if="path && showTest">
+            <li><span class="font-bold">Mouse Pos</span>: {{ mouse }}</li>
+            <li>SEGMENTS</li>
             <li v-for="s,index in path.segments" :key="`p${index}`">
                 {{ s }}
             </li>
@@ -23,6 +24,7 @@ export default {
     props: ['canvasID'],
     data() {
         return {
+            showTest: false,
             path: null,
             testpath: null,
             paper: null,
@@ -74,7 +76,7 @@ export default {
         createPath(strength) {
             var vm = this;
             vm.path = new paper.Path({
-                // fillColor: 'black',
+                fillColor: 'black',
                 strokeColor: new paper.Color(1, .4, 0),
                 strokeWidth: '10',
                 closed: false
@@ -108,7 +110,7 @@ export default {
                 var dy = (point.y - point.py) * force;
                 point.py = point.y;
                 point.y = Math.max(point.y + dy, 0);
-                if (point.y >  vm.size.height)  point.y = vm.size.height - 10;
+                if (point.y >  vm.size.height)  point.y = vm.size.height - 50;
             }
 
             for (let j = 0, l = vm.springs.length; j < l; j++) {

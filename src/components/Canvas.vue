@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{ canvasID }} {{ scope }}
         <canvas :id="canvasID" class="canvas-style" v-on:mousedown="mouseDown" />
     </div>
 </template>

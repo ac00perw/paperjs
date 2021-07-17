@@ -1,5 +1,6 @@
 <template>
-  <div class="home">
+  <div class="home mt-8">
+    <p>Draw on a canvas</p>
     <Canvas canvasID="c3" />
   </div>
 </template>

@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="nav" class="fixed top-0 right-0 m-0 z-50">
       <router-link to="/">Home</router-link> |
       <router-link to="/string">String</router-link> |
       <router-link to="/lava">Waves</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/scroll">Scroll</router-link>
     </div>
     <router-view/>
   </div>

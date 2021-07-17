@@ -76,7 +76,7 @@ export default {
         createPath(strength) {
             var vm = this;
             vm.path = new paper.Path({
-                fillColor: 'black',
+                // fillColor: 'black',
                 strokeColor: new paper.Color(1, .4, 0),
                 strokeWidth: '10',
                 closed: false

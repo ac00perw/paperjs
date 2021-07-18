@@ -4,7 +4,8 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/string">String</router-link> |
       <router-link to="/lava">Waves</router-link> |
-      <router-link to="/scroll">Scroll</router-link>
+      <router-link to="/scroll">Scroll</router-link> |
+      <router-link to="/scroll-2">Scroll2</router-link>
     </div>
     <router-view/>
   </div>

@@ -65,10 +65,8 @@
         cursor: crosshair;
         width: 100% !important;
         height: 500px !important;
-        border: 5px solid black;
-        border-radius: 10px;
+        border: 1px solid black;
         display: block;
         margin: auto;
-        box-shadow: 0 10px 8px -8px black;
     }
 </style>

@@ -30,9 +30,9 @@ export default {
             paper: null,
             size: null,
             springs: null,
-            friction: 0.8,
-            timeStep: 0.28,
-            amount: 20,
+            friction: 1.5,
+            timeStep: 0.4,
+            amount: 60,
             mass: 2,
             count: 0,
             invMass: 1,
@@ -60,9 +60,9 @@ export default {
                 this.path.remove();
             this.springs = [];
             this.size = this.paper.view.size;
-            this.createPath(0.2);
+            this.createPath(.2);
 
-            this.paper.view.onFrame = () => this.updateWave(vm);
+            this.paper.view.onFrame = (e) => this.updateWave(e);
 
         },
         spring(a, b, strength, restLength, invMass) {
@@ -100,17 +100,17 @@ export default {
             vm.paper.activate();
             // vm.path.position.x =0;// -= vm.size.width / 4;
         },
-        updateWave(vm) {
-
+        updateWave(event) {
+            var vm = this;
             var force = 1 - vm.friction * vm.timeStep * vm.timeStep;
 
             for (let i = 0, l = vm.path.segments.length; i < l; i++) {
                 var point = vm.path.segments[i].point;
                 // console.log('point', point.y, point.py);
-                var dy = (point.y - point.py) * force;
+                var dy = (point.y - point.py) * (force + (event.count % 2/10));
                 point.py = point.y;
                 point.y = Math.max(point.y + dy, 0);
-                if (point.y >  vm.size.height)  point.y = vm.size.height - 50;
+                if (point.y >  vm.size.height)  point.y = vm.size.height - 10;
             }
 
             for (let j = 0, l = vm.springs.length; j < l; j++) {

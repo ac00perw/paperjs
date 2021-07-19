@@ -1,7 +1,6 @@
 <template>
   <div class="home mt-8">
-    <h1>String</h1>
-    <StringBuild canvasID="c3" />
+    <StringBuild canvasID="c3" class="canv" />
   </div>
 </template>
 

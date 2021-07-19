@@ -1,7 +1,6 @@
 <template>
   <div class="home mt-8">
-    <p>Draw on a canvas</p>
-    <Canvas canvasID="c3" />
+    <Canvas canvasID="c3" class="canv"/>
   </div>
 </template>
 
@@ -18,3 +17,6 @@ export default {
   }
 }
 </script>
+<style scoped>
+
+  </style>

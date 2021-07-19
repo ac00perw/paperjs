@@ -7,3 +7,11 @@
         @apply mb-4;
     }
 }
+
+body {
+    background-color: #BED0AF;
+}
+
+.canv {
+  background-color: white;
+}

@@ -1,6 +1,5 @@
 <template>
     <div class="home">
-        <h1 class="text-4xl">Lava or waves</h1>
         <canvas class="canvas-style" ref="c3" @mousemove="mouseMove" />
         <div class="underneath">
           <div class="para">
@@ -53,7 +52,8 @@ export default {
                 fillColor: '#99cc99',
                 strokeColor: '#99cc99',
                 strokeWidth: '4',
-                closed: false
+                closed: false,
+                // selected: true
             });
             vm.path.segments = [];
             vm.path.add(0, vm.height);

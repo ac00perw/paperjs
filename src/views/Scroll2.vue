@@ -1,8 +1,14 @@
 <template>
     <div class="home relative">
-        <h1>Lava or waves</h1>
         <div class="fixed p-2 bg-white border top-0 left-0">
-            {{ delta }} <span v-if="path">{{ path.segments.length }}</span> {{ windowHeight }} {{ pct }}
+            {{ delta }} <span v-if="path">{{ path.segments.length }}</span>
+            <div>
+                <custom-slider :values="sliderValues" v-model="sinSeedModifier" />
+                sinSeed modifier
+            </div>
+        </div>
+        <div class="progress">
+            <div class="bar" :style="{width: `${pct}%`}">&nbsp;</div>
         </div>
         <canvas class="canvas-style" ref="c3" @mousemove="mouseMove" />
         <div class="underneath">
@@ -10,7 +16,7 @@
         </div>
         <div class="text">
             <div class="para">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+                <span class="font-bold">Use distance to bottom of page to affect waves.</span> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
             </div>
             <div class="para">
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
@@ -32,13 +38,19 @@
 </template>
 <script>
 import paper from 'paper';
+import CustomSlider from "vue-custom-range-slider";
+import "vue-custom-range-slider/dist/vue-custom-range-slider.css";
+
 
 export default {
     name: 'Lava',
     props: ['color'],
+    components: { CustomSlider },
     data() {
         return {
+            scrollY: 0,
             lastPos: 0,
+            sinSeedModifier: '50',
             pct: 0,
             windowHeight: 0,
             delta: 0,
@@ -49,10 +61,36 @@ export default {
             paper: null,
             path: null,
             points: 18,
+            pointsIn: null,
             width: 0,
             height: 0,
             speed: 0,
-            center: null
+            center: null,
+            changed: false,
+            scrollTop: document.scrollTop,
+            slider: "a",
+            // sliderValues: null,
+            sliderValues: [{
+                    // label: "Not at all",
+                    value: '50'
+                },
+                {
+                    // label: "A tiny bit",
+                    value: '100'
+                },
+                {
+                    // label: "Its ok",
+                    value: '200'
+                },
+                {
+                    // label: "Its very good",
+                    value: '300'
+                },
+                {
+                    // label: "Its AMAZING!",
+                    value: '400'
+                }
+            ],
         }
     },
     destroyed() {
@@ -60,23 +98,33 @@ export default {
         window.removeEventListener('scroll', this.handleScroll);
     },
     mounted() {
-        var body = document.body, html = document.documentElement;
-        this.windowHeight =  Math.max( body.scrollHeight, body.offsetHeight, 
-                       html.clientHeight, html.scrollHeight, html.offsetHeight );
-        this.paper = new paper.PaperScope();
+        var body = document.body,
+            html = document.documentElement;
+        this.windowHeight = document.documentElement.scrollHeight;
+        this.pointsIn = this.points;
 
-        this.paper.setup(this.$refs['c3']);
-        this.width = this.paper.view.size.width;
-        this.height = this.paper.view.size.height;
-        this.center = this.paper.view.center;
-        this.mousePos = this.paper.view.center;
-        this.pathHeight = this.mousePos.y;
-        this.path = null;
         this.init();
 
         window.addEventListener('scroll', this.handleScroll);
     },
     methods: {
+        getDocHeight() {
+            var D = document;
+            return Math.max(
+                D.body.scrollHeight, D.documentElement.scrollHeight,
+                D.body.offsetHeight, D.documentElement.offsetHeight,
+                D.body.clientHeight, D.documentElement.clientHeight
+            )
+        },
+        calculatePercentage() {
+            var winheight = window.innerHeight || (document.documentElement || document.body).clientHeight
+            var docheight = this.getDocHeight()
+            var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
+            var trackLength = docheight - winheight
+            var pctScrolled = Math.floor(scrollTop / trackLength * 100) // gets percentage scrolled (ie: 80 or NaN if tracklength == 0)
+            console.log(pctScrolled + '% scrolled');
+            this.pct = pctScrolled;
+        },
         clear() {
             // this.lastPos = null;
             this.delta = 10;
@@ -87,6 +135,7 @@ export default {
             this.clear();
 
             newPos = window.scrollY;
+            this.calculatePercentage();
 
             if (this.lastPos != null) { // && newPos < maxScroll 
                 this.delta = Math.abs(newPos - this.lastPos);
@@ -100,8 +149,24 @@ export default {
         },
         init() {
             var vm = this;
+            this.paper = null;
+            console.log('init', vm.pointsIn)
+            if (!vm.pointsIn && vm.pointsIn != 0) {
+                vm.path = null;
+                vm.points = vm.pointsIn;
+            }
+            vm.paper = new paper.PaperScope();
+            // this.paper.view.onFrame = () => null;
+
+            vm.paper.setup(this.$refs['c3']);
+            vm.width = this.paper.view.size.width;
+            vm.height = this.paper.view.size.height;
+            vm.center = this.paper.view.center;
+            vm.mousePos = this.paper.view.center;
+            vm.pathHeight = this.mousePos.y;
+            vm.path = null;
             vm.paper.activate();
-            vm
+
             vm.path = new paper.Path({
                 strokeColor: '#E2F8D1',
                 fillColor: '#E2F8D1',
@@ -110,29 +175,25 @@ export default {
             });
             vm.path.segments = [];
             vm.path.add(0, vm.height);
-            vm.path.add(0, vm.height/2);
+            vm.path.add(0, vm.height / 2);
 
             for (var i = 1; i < vm.points; i++) {
-                var point = new paper.Point(vm.width / vm.points * i, vm.height/2);
+                var point = new paper.Point(vm.width / vm.points * i, vm.height / 2);
                 vm.path.add(point);
             }
-            vm.path.add(vm.width, vm.height/2)
+            vm.path.add(vm.width, vm.height / 2)
             vm.path.add(vm.width, vm.height)
-            // vm.path.add(0, vm.height)
-
-            // var rect = new paper.Shape.Rectangle(new paper.Point(0, vm.height - 10), new paper.Point(vm.width, vm.height))
-            // rect.fillColor = new paper.Color(.6, .8, .6);
             vm.paper.view.onFrame = (e) => vm.onFrame(e);
         },
         onFrame(event) {
             var vm = this;
-            vm.pct = Math.ceil((vm.lastPos/vm.windowHeight) * 100);
+            // vm.pct = ((window.scrollY / vm.windowHeight) * 100);
 
-            vm.pathHeight += (vm.center.y - (vm.pct) - (vm.pathHeight/2)) / 160;
+            vm.pathHeight += (vm.center.y - (vm.pct) - (vm.pathHeight / 2)) / 160;
             for (var i = 2; i < (vm.points + 1); i++) {
                 var sinSeed = event.count + (i + i % 10) * (vm.pct * 3);
-                var sinHeight = Math.sin(sinSeed / (200 - vm.pct * 2 )) * (vm.pathHeight / 2);
-                var yPos = Math.sin(sinSeed / 300) * sinHeight + (vm.height/2);
+                var sinHeight = Math.cos(sinSeed / (vm.sinSeedModifier - vm.pct * 2)) * (vm.pathHeight / 2);
+                var yPos = Math.cos(sinSeed / 300) * sinHeight + (vm.height / 2);
                 vm.path.segments[i].point.y = yPos;
             }
             vm.path.smooth({ type: 'continuous' });
@@ -155,9 +216,6 @@ export default {
 <style>
 :root {
     --canvasheight: 500px;
-}
-body {
-    background-color: #BED0AF;
 }
 </style>
 <style scoped>
@@ -198,5 +256,15 @@ body {
     min-height: 1600px;
     padding-top: 20px;
 
+}
+
+.progress {
+    z-index: 300;
+    @apply fixed bottom-0 w-full left-0 border border-black h-2;
+}
+
+.bar {
+    transition: width .1s ease-in-out;
+    @apply bg-yellow-500 h-2;
 }
 </style>

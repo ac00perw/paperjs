@@ -7,8 +7,18 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'Draw on canvas',
     component: Home
+  },
+  {
+    path: '/shapes',
+    name: 'Shapes',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Shapes.vue')
+  },
+  {
+    path: '/time-shapes',
+    name: 'Time Shapes',
+    component: () => import(/* webpackChunkName: "about" */ '../views/TimeShapes.vue')
   },
   {
     path: '/string',
@@ -17,7 +27,7 @@ const routes = [
   },
   {
     path: '/lava',
-    name: 'Lava',
+    name: 'Lava Lamp/Waves',
     component: () => import(/* webpackChunkName: "about" */ '../views/Lava.vue')
   },
   {
@@ -29,6 +39,11 @@ const routes = [
     path: '/scroll-2',
     name: 'Scroll2',
     component: () => import(/* webpackChunkName: "about" */ '../views/Scroll2.vue')
+  },
+    {
+    path: '/random',
+    name: 'Random Blob',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Random.vue')
   },
   {
     path: '/about',

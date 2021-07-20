@@ -21,11 +21,29 @@ export default {
             return paper;
         }
     },
+    destroyed() {
+         window.addEventListener('resize', this.resize);
+         this.scope = null;   
+    },
     mounted() {
-        this.scope = new paper.PaperScope();
-        this.scope.setup(this.canvasID);
+        this.init();
+        window.addEventListener('resize', this.resize);
     },
     methods: {
+        init(){
+            this.scope = new paper.PaperScope();
+            this.scope.setup(this.canvasID);
+        },
+        resize() {
+            var vm = this;
+            vm.scope.view.onResize = function(event) {
+                console.log('re')
+                // vm.scope = null;
+                vm.path.position = vm.scope.view.center;
+                // Whenever the view is resized, move the path to its center:
+                // vm.init();
+            }
+        },
         download() {
             var fileName = "paperjs_drawing.svg"
 
@@ -79,10 +97,13 @@ export default {
 <style scoped>
 .canvas-style {
     cursor: crosshair;
-    width: 100% !important;
-    height: 80vh !important;
+    width: 1200px;
+    height: 700px;
     border: 1px solid black;
-    display: block;
+    display: fixed;
+    top: 0;
+    left: 0;
     margin: auto;
 }
+
 </style>

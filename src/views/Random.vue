@@ -22,7 +22,7 @@ export default {
             tool: null,
             paper: null,
             path: null,
-            points: 27,
+            points: 18,
             width: 0,
             height: 0,
             speed: 0,
@@ -90,15 +90,15 @@ export default {
                 var xPos = Math.cos(sinSeed / 500) * vm.width;
                 vm.path.segments[i].point.y -= Math.sin(yPos / 2);
                 vm.path.segments[i].point.x -= Math.sin(xPos / 3);
-                    // if (seg.previous) {
-                    //     var previous = seg.previous.point;
-                    //     previous.y -= Math.cos(yPos - previous.y / .04);
-                    //     previous.x -= Math.sin(xPos - previous.x / .04);
-                    // }
-                    // if (seg.next) {
-                    //     var next = seg.next.point;
-                    //     next.y += (yPos - next.y) / 1000;
-                    // }
+                    if (seg.previous) {
+                        var previous = seg.previous.point;
+                        previous.y -= Math.cos(yPos - previous.y / .04);
+                        previous.x -= Math.sin(xPos - previous.x / .04);
+                    }
+                    if (seg.next) {
+                        var next = seg.next.point;
+                        next.y += (yPos - next.y) / 1000;
+                    }
             }
             vm.path.smooth({ type: 'continuous' });
             // vm.path.simplify(1.2);

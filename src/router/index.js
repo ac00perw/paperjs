@@ -20,6 +20,11 @@ const routes = [
     name: 'Time Shapes',
     component: () => import(/* webpackChunkName: "about" */ '../views/TimeShapes.vue')
   },
+  {
+    path: '/boxes',
+    name: 'Boxes',
+    component: () => import(/* webpackChunkName: "about" */ '../views/TimeBoxes.vue')
+  },
     {
     path: '/time-scroll-shapes',
     name: 'Time Scroll Shapes',

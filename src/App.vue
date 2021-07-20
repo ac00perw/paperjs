@@ -1,15 +1,16 @@
 <template>
   <div id="app">
     <div id="nav" class="fixed top-0 right-0 m-0 z-50">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/shapes">Shapes</router-link> |
-      <router-link to="/time-shapes">Time Shapes</router-link> |
-      <router-link to="/string">String</router-link> |
-      <router-link to="/lava">Waves</router-link> |
-      <router-link to="/scroll">Scroll</router-link> |
-      <router-link to="/scroll-2">Scroll2</router-link> |
-      <router-link to="/time-scroll-shapes">Scroll3</router-link> |
-      <router-link to="/random">Blob</router-link>
+      <router-link to="/">draw</router-link> |
+      <router-link to="/shapes">shapes</router-link> |
+      <router-link to="/time-shapes">shapes 2</router-link> |
+      <router-link to="/boxes">boxes</router-link> |
+      <router-link to="/string">string</router-link> |
+      <router-link to="/lava">waves</router-link> |
+      <router-link to="/scroll">scroll</router-link> |
+      <router-link to="/scroll-2">scroll 2</router-link> |
+      <router-link to="/time-scroll-shapes">scroll 3</router-link> |
+      <router-link to="/random">blob</router-link>
     </div>
     <h1 class="text-3xl">{{ $route.name}}</h1>
     <router-view/>

@@ -115,18 +115,13 @@ export default {
     }
 }
 </script>
-<style>
-:root {
-    --canvasheight: 100vh;
-}
-</style>
 <style scoped>
 .canvas-style {
     position: fixed;
     top: 0;
     left: 0;
     width: 100% !important;
-    height: var(--canvasheight) !important;
+    height: 100vh !important;
     display: block;
     margin: auto;
     z-index: -10;
@@ -134,7 +129,7 @@ export default {
 
 .underneath {
     position: fixed;
-    top: var(--canvasheight);
+    top: 100vh;
     left: 0;
     z-index: 10;
     width: 100%;

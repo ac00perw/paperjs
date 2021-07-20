@@ -77,7 +77,7 @@ export default {
             var vm = this;
             vm.path = new paper.Path({
                 // fillColor: 'black',
-                strokeColor: new paper.Color(1, .4, 0),
+                strokeColor: '#aaaabb',
                 strokeWidth: '10',
                 closed: false
             });
@@ -107,18 +107,19 @@ export default {
             for (let i = 0, l = vm.path.segments.length; i < l; i++) {
                 var point = vm.path.segments[i].point;
                 // console.log('point', point.y, point.py);
-                var dy = (point.y - point.py) * (force + (event.count % 2/10));
+                var dy = (point.y - point.py) * (force + (event.count % 2/20));
                 point.py = point.y;
                 point.y = Math.max(point.y + dy, 0);
-                if (point.y >  vm.size.height)  point.y = vm.size.height - 10;
+                // if (point.y >  vm.size.height - 20)  point.y = vm.size.height - 20;
             }
 
-            for (let j = 0, l = vm.springs.length; j < l; j++) {
-                // vm.springs[j] = vm.update(vm.springs[j], vm.invMass);
-            }
+            // for (let j = 0, l = vm.springs.length; j < l; j++) {
+            //     //vm.springs[j] = vm.update(vm.springs[j], vm.invMass);
+            // }
             
             vm.path.smooth({ type: 'continuous' });
-            vm.$forceUpdate();
+            // vm.path.fitBounds(vm.paper.view.bounds);
+            // vm.$forceUpdate();
         },
         update(spring, invMass) {
             
@@ -150,10 +151,10 @@ export default {
                 
                 var point = segment.point;
 
-                if (!point.fixed && location.distance < vm.size.height / 4) {
+                if (!point.fixed && (location.distance < vm.size.height / 3)) {
 
                     var y = event.point.y;
-                    point.y += (y - point.y) / 6;
+                    point.y += (y - point.y) / 12;
                     if (segment.previous && !segment.previous.fixed) {
                         var previous = segment.previous.point;
                         previous.y += (y - previous.y) / 24;
@@ -172,8 +173,6 @@ export default {
 .canvas-style {
     width: 100% !important;
     height: 500px !important;
-    border: 1px solid black;
-    border-radius: 10px;
     display: block;
     margin: auto;
 }

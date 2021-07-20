@@ -1,21 +1,23 @@
 <template>
     <div class="home relative">
-        <span v-if="startable"><button @click="init">restart</button></span>
-        <canvas class="canvas-style" ref="c3" @mousemove="mouseMove" />
+        <div class="fixed top-0 left-0 p-2 bg-white">Use the mouse to draw lines</div>
+        {{ mousePos }}
+        <span v-if="!mousing"><button @click="init">restart</button></span>
+        <canvas class="canvas-style" ref="c3" @mouseup="mousing = false" @mousedown="mousing = true" @mousemove="mouseMove" />
     </div>
 </template>
 <script>
 import paper from 'paper';
 
 export default {
-    name: 'TimeShapes',
+    name: 'DrawShapes',
     data() {
         return {
-            startable: false,
             lastPos: 0,
             delta: 0,
             deltaMax: 120,
             mousePos: null,
+            mousing: false,
             pathHeight: null,
             tool: null,
             paper: null,
@@ -26,7 +28,7 @@ export default {
             height: 0,
             speed: 0,
             center: null,
-            radius: 300,
+            radius: 200,
             from: null
         }
     },
@@ -74,8 +76,7 @@ export default {
                 // vm.shapes[i].fillColor = '#99cc11' ;
                 vm.shapes[i].strokeWidth = 1;
                 vm.shapes[i].opacity = .3;
-                vm.shapes[i].rotate(count * 2)
-
+                vm.shapes[i].rotate(count * 1.1)
                 // point = point - vm.paper.view.center;
                 // point = point + new paper.Point.random();
                 // vm.path.add(point);
@@ -89,10 +90,10 @@ export default {
             var angle = (theta * currentPoint);
             var modifier1 = Math.cos(count * 300) * (120 + count);
             var modifier2 = Math.sin(count * 300) * vm.rand(100, 300);
-            var to = new paper.Point(vm.paper.view.center.x - (vm.radius * Math.cos(angle) + modifier1) - (boxSize / 2), vm.paper.view.center.y - (vm.radius * Math.sin(angle) + modifier2) - (boxSize / 2));
-            return new paper.Path.Line(vm.from, to)
+            var to = new paper.Point(vm.mousePos.x - (vm.radius * Math.cos(angle) + modifier1) - (boxSize / 2), vm.mousePos.y - (vm.radius * Math.sin(angle) + modifier2) - (boxSize / 2));
+            return new paper.Path.Line(vm.mousePos, to)
             vm.from = to;
-            // return new paper.Path.Rectangle(new paper.Point(vm.paper.view.center.x - (vm.radius * Math.cos(angle)+modifier1)-(boxSize/2), vm.paper.view.center.y - (vm.radius * Math.sin(angle) + modifier2) - (boxSize/2) ), new paper.Size(boxSize + (modifier2/2), boxSize + (modifier1/2)));
+            // return new paper.Path.Rectangle(to, new paper.Size(boxSize + (modifier2/2), boxSize + (modifier1/2)));
 
         },
         rand(min, max) {
@@ -102,16 +103,10 @@ export default {
             var vm = this;
             // draw shapes
             //if (event.count % 2) {
-
-                this.drawShapes(event.count);
-                vm.startable = false;
-                console.log(event.count)
-
-                var p=setTimeout(() => {
-                    vm.paper.view.onFrame = undefined;
-                    vm.startable = true;
-                }, 2000)
-
+            if(vm.mousing){
+                vm.drawShapes(event.count);
+                    
+            }
            //}
 
 
@@ -131,26 +126,23 @@ export default {
     }
 }
 </script>
-<style>
-:root {
-    --canvasheight: 100vh;
-}
-</style>
+
 <style scoped>
 .canvas-style {
     position: fixed;
     top: 0;
     left: 0;
     width: 100% !important;
-    height: var(--canvasheight) !important;
+    height: 100vh !important;
     display: block;
     margin: auto;
     z-index: -10;
+    cursor:  pointer;
 }
 
 .underneath {
     position: fixed;
-    top: var(--canvasheight);
+    top: 100vh;
     left: 0;
     z-index: 10;
     width: 100%;

@@ -1,6 +1,7 @@
 <template>
     <div class="home relative">
-        <div class="fixed p-2 bg-white border top-0 left-0">
+        <div class="fixed p-2 bg-white border top-0 left-0 text-xs">
+            Scroll at different speeds to affect the waves
             {{ delta }}
         </div>
         <canvas class="canvas-style" ref="c3" @mousemove="mouseMove" />
@@ -8,23 +9,8 @@
             &nbsp;
         </div>
         <div class="text">
-            <div class="para">
+            <div class="para" v-for="index in 50">
                 <span class="font-bold">Detect scroll velocity and use it to change shape of waves. </span>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-            </div>
-            <div class="para">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-            </div>
-            <div class="para">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-            </div>
-            <div class="para">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-            </div>
-            <div class="para">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-            </div>
-            <div class="para">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
             </div>
         </div>
     </div>
@@ -45,7 +31,7 @@ export default {
             tool: null,
             paper: null,
             path: null,
-            points: 20,
+            points: 10,
             width: 0,
             height: 0,
             speed: 0,
@@ -73,7 +59,7 @@ export default {
     methods: {
         clear() {
             // this.lastPos = null;
-            this.delta = 10;
+            this.delta = 15;
         },
         handleScroll() {
             var newPos, timer, delay = 50;
@@ -83,9 +69,9 @@ export default {
             newPos = window.scrollY;
 
             if (this.lastPos != null) { // && newPos < maxScroll 
-                this.delta = Math.abs(newPos - this.lastPos);
-                if (this.delta > this.deltaMax)
-                    this.delta = this.deltaMax;
+                this.delta = Math.round(newPos - this.lastPos);
+                //if (this.delta > this.deltaMax)
+                    //this.delta = this.deltaMax;
             }
             this.lastPos = newPos;
             clearTimeout(timer);
@@ -112,7 +98,7 @@ export default {
             }
             vm.path.add(vm.width + 200, vm.height / 2)
             vm.path.add(vm.width + 200, vm.height)
-            vm.path.add(-400, vm.height)
+            vm.path.add(-200, vm.height)
 
             // var rect = new paper.Shape.Rectangle(new paper.Point(0, vm.height - 10), new paper.Point(vm.width, vm.height))
             // rect.fillColor = new paper.Color(.6, .8, .6);
@@ -122,7 +108,7 @@ export default {
             var vm = this;
             vm.pathHeight += (vm.center.y - (vm.delta * 8) - (vm.pathHeight/2)) / 60;
             for (var i = 1; i < vm.points; i++) {
-                var sinSeed = event.count + (i + i % 10) * (300);
+                var sinSeed = event.count + (i + i % 10) * (vm.delta/2);
                 var sinHeight = Math.sin(sinSeed / 200) * (vm.pathHeight / 2);
                 var yPos = Math.sin(sinSeed / 300) * sinHeight + (vm.height/2 - 50);
                 vm.path.segments[i+1].point.y = yPos;
@@ -184,7 +170,7 @@ export default {
 .para {
     text-align: left;
     max-width: 400px;
-    min-height: 1600px;
+    margin-bottom:  300px;
     padding-top: 20px;
 
 }

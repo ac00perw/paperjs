@@ -64,7 +64,7 @@
     .canvas-style {
         cursor: crosshair;
         width: 100% !important;
-        height: 500px !important;
+        height: 80vh !important;
         border: 1px solid black;
         display: block;
         margin: auto;

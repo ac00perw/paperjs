@@ -22,12 +22,12 @@ export default {
             tool: null,
             paper: null,
             path: null,
-            points: 21,
+            points: 27,
             width: 0,
             height: 0,
             speed: 0,
             center: null,
-            radius: 240
+            radius: 400
         }
     },
     destroyed() {
@@ -54,8 +54,9 @@ export default {
             vm.path = new paper.Path({
                 strokeColor: '#99aa11',
                 fillColor: '#99aa11',
-                strokeWidth: '10',
-                closed: true
+                strokeWidth: '1',
+                closed: true,
+                selected: false
             });
 
             for (var i = 0; i < vm.points; i++) {
@@ -79,17 +80,28 @@ export default {
         },
         onFrame(event) {
             var vm = this;
-            vm.pathHeight += (vm.center.y - (vm.delta * 8) - (vm.pathHeight / 2)) / 10;
+
+            vm.pathHeight += (vm.center.y - (8) - (vm.pathHeight / 2)) / 10;
             for (var i = 0; i < vm.path.segments.length; i++) {
+                var seg = vm.path.segments[i];
                 var sinSeed = event.count + (i + i % 2) * 10;
-                var sinHeight = Math.sin(sinSeed / 200) * (vm.pathHeight / 3);
-                var yPos = Math.sin(sinSeed / 200) * sinHeight + (vm.height);
-                var xPos = Math.cos(sinSeed / 400) * vm.width;
-                vm.path.segments[i].point.y -= Math.sin(yPos / 10);
-                vm.path.segments[i].point.x -= Math.sin(xPos / 10);
+                var sinHeight = Math.sin(sinSeed / 220) * (vm.pathHeight / 20);
+                var yPos = Math.sin(sinSeed / 300) * sinHeight + (vm.height);
+                var xPos = Math.cos(sinSeed / 500) * vm.width;
+                vm.path.segments[i].point.y -= Math.sin(yPos / 2);
+                vm.path.segments[i].point.x -= Math.sin(xPos / 3);
+                    // if (seg.previous) {
+                    //     var previous = seg.previous.point;
+                    //     previous.y -= Math.cos(yPos - previous.y / .04);
+                    //     previous.x -= Math.sin(xPos - previous.x / .04);
+                    // }
+                    // if (seg.next) {
+                    //     var next = seg.next.point;
+                    //     next.y += (yPos - next.y) / 1000;
+                    // }
             }
             vm.path.smooth({ type: 'continuous' });
-            // vm.path.simplify();
+            // vm.path.simplify(1.2);
             
         },
         onResize(event) {
@@ -107,33 +119,17 @@ export default {
     }
 }
 </script>
-<style>
-:root {
-    --canvasheight: 100vh;
-}
-</style>
+
 <style scoped>
 .canvas-style {
     position: fixed;
     top: 0;
     left: 0;
     width: 100% !important;
-    height: var(--canvasheight) !important;
+    height: 100vh !important;
     display: block;
     margin: auto;
     z-index: -10;
-}
-
-.underneath {
-    position: fixed;
-    top: var(--canvasheight);
-    left: 0;
-    z-index: 10;
-    width: 100%;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-color: #99cc99;
 }
 
 .text {

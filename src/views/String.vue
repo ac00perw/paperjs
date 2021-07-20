@@ -1,5 +1,6 @@
 <template>
   <div class="home mt-8">
+    <div class="fixed top-0 left-0 p-2 bg-white text-xs">Use the mouse move the string</div>
     <StringBuild canvasID="c3" class="canv" />
   </div>
 </template>

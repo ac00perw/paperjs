@@ -8,6 +8,7 @@
       <router-link to="/lava">Waves</router-link> |
       <router-link to="/scroll">Scroll</router-link> |
       <router-link to="/scroll-2">Scroll2</router-link> |
+      <router-link to="/time-scroll-shapes">Scroll3</router-link> |
       <router-link to="/random">Blob</router-link>
     </div>
     <h1 class="text-3xl">{{ $route.name}}</h1>

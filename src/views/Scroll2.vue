@@ -1,7 +1,7 @@
 <template>
     <div class="home relative">
-        <div class="fixed p-2 bg-white border top-0 left-0">
-            {{ delta }} <span v-if="path">{{ path.segments.length }}</span>
+        <div class="fixed p-2 bg-white border top-0 left-0 text-xs">
+            Page progress affects waves. {{ pct }}
             <div>
                 <custom-slider :values="sliderValues" v-model="sinSeedModifier" />
                 sinSeed modifier
@@ -53,14 +53,12 @@ export default {
             sinSeedModifier: '50',
             pct: 0,
             windowHeight: 0,
-            delta: 0,
-            deltaMax: 120,
             mousePos: null,
             pathHeight: null,
             tool: null,
             paper: null,
             path: null,
-            points: 18,
+            points: 12,
             pointsIn: null,
             width: 0,
             height: 0,
@@ -122,12 +120,10 @@ export default {
             var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop
             var trackLength = docheight - winheight
             var pctScrolled = Math.floor(scrollTop / trackLength * 100) // gets percentage scrolled (ie: 80 or NaN if tracklength == 0)
-            console.log(pctScrolled + '% scrolled');
             this.pct = pctScrolled;
         },
         clear() {
             // this.lastPos = null;
-            this.delta = 10;
         },
         handleScroll() {
             var newPos, timer, delay = 50;
@@ -137,11 +133,6 @@ export default {
             newPos = window.scrollY;
             this.calculatePercentage();
 
-            if (this.lastPos != null) { // && newPos < maxScroll 
-                this.delta = Math.abs(newPos - this.lastPos);
-                if (this.delta > this.deltaMax)
-                    this.delta = this.deltaMax;
-            }
             this.lastPos = newPos;
             clearTimeout(timer);
             timer = setTimeout(this.clear, delay);
@@ -192,7 +183,7 @@ export default {
             vm.pathHeight += (vm.center.y - (vm.pct) - (vm.pathHeight / 2)) / 160;
             for (var i = 2; i < (vm.points + 1); i++) {
                 var sinSeed = event.count + (i + i % 10) * (vm.pct * 3);
-                var sinHeight = Math.cos(sinSeed / (vm.sinSeedModifier - vm.pct * 2)) * (vm.pathHeight / 2);
+                var sinHeight = Math.cos(sinSeed / (vm.sinSeedModifier * 2)) * (vm.pathHeight / 2);
                 var yPos = Math.cos(sinSeed / 300) * sinHeight + (vm.height / 2);
                 vm.path.segments[i].point.y = yPos;
             }
@@ -213,18 +204,14 @@ export default {
     }
 }
 </script>
-<style>
-:root {
-    --canvasheight: 500px;
-}
-</style>
+
 <style scoped>
 .canvas-style {
     position: fixed;
     top: 0;
     left: 0;
     width: 100% !important;
-    height: var(--canvasheight) !important;
+    height: 500px !important;
     display: block;
     margin: auto;
     z-index: -10;
@@ -232,7 +219,7 @@ export default {
 
 .underneath {
     position: fixed;
-    top: var(--canvasheight);
+    top: 500px;
     left: 0;
     z-index: 10;
     width: 100%;

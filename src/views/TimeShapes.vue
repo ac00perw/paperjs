@@ -1,8 +1,8 @@
 <template>
     <div class="home relative">
         <div class="fixed top-0 left-0 p-2 bg-white">Use the mouse to draw lines</div>
-        {{ mousePos }}
-        <span v-if="!mousing"><button @click="init">restart</button></span>
+        <button class="my-4 bg-blue-500 text-white rounded-md p-2" @click="download">Download SVG</button>
+        <button class="my-4 bg-red-500 ml-4 text-white rounded-md p-2" @click="init">Erase</button>
         <canvas class="canvas-style" ref="c3" @mouseup="mousing = false" @mousedown="mousing = true" @mousemove="mouseMove" />
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
             tool: null,
             paper: null,
             path: null,
-            points: 100,
+            points: 10,
             shapes: [],
             width: 0,
             height: 0,
@@ -44,6 +44,16 @@ export default {
         this.init();
     },
     methods: {
+        download() {
+            var fileName = "lines_drawing.svg"
+
+            var url = "data:image/svg+xml;utf8," + encodeURIComponent(this.paper.project.exportSVG({ asString: true, matchShapes: true }));
+
+            var link = document.createElement("a");
+            link.download = fileName;
+            link.href = url;
+            link.click();
+        },
         resetPaper() {
             this.paper.project.activeLayer.removeChildren();
             this.paper.view.draw();

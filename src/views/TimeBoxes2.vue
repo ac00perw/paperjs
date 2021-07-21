@@ -1,8 +1,8 @@
 <template>
     <div class="home relative">
-        {{ matrix.length }} {{mousePos}} {{ selectedPoint}}
+        <!-- <span v-if="paper && paper.project">{{ paper.project.layers }}</span> --> <span v-if="shapes">{{ shapes[12]}}</span> pt:{{mousePos}} sel:{{ selectedPoint}}
         <div class="fixed top-0 left-0 p-2 bg-white">Use the mouse to draw lines</div>
-        <button class="my-4 bg-blue-500 text-white rounded-md p-2" @click="download">Download SVG</button>
+        <!-- <button class="my-4 bg-blue-500 text-white rounded-md p-2" @click="download">Download SVG</button> -->
         <button class="my-4 bg-red-500 ml-4 text-white rounded-md p-2" @click="init">Erase</button>
         <canvas class="canvas-style" ref="c3" @mouseup="mousing = false" @mousedown="mousing = true" @mousemove="mouseMove" />
     </div>
@@ -11,7 +11,7 @@
 import paper from 'paper';
 
 export default {
-    name: 'TimeBoxes',
+    name: 'TimeBoxes2',
     data() {
         return {
             lastPos: 0,
@@ -22,19 +22,21 @@ export default {
             pathHeight: null,
             tool: null,
             paper: null,
+            layer: null,
             path: null,
             shapes: [],
             width: 0,
             height: 0,
             speed: 0,
             center: null,
-            boxSize: {x:100, y:50},
+            boxSize: { x: 150, y: 100 },
             xPostitions: 0,
             yPositions: 0,
             from: null,
             matrix: [],
             selectedPoint: null,
-            i: 0
+            i: 0,
+            iterations: 50
         }
     },
     destroyed() {
@@ -53,12 +55,14 @@ export default {
             arr.sort(() => Math.random() - 0.5);
         },
         buildMatrix() {
+
             for (var j = 0, yc = Math.ceil(this.height / this.boxSize.y); j < yc; j++) { //build rows
                 for (var i = 0, c = Math.ceil(this.width / this.boxSize.x); i < c; i++) {
-                    console.log(i%2);
-                    this.matrix.push({ x: i * this.boxSize.x + this.rand(0,2)+(j % 2) * (this.boxSize.x/2) + (i %2 * 2), y: (j * this.boxSize.y + (j*3))});
+                    console.log(i % 2);
+                    this.matrix.push({ x: i * this.boxSize.x + this.rand(0, 2) + (j % 2) * (this.boxSize.x / 2) + (i % 2 * 2), y: (j * this.boxSize.y + (j * 3)) });
                 }
             }
+
             this.shuffle(this.matrix);
         },
         download() {
@@ -73,7 +77,7 @@ export default {
         },
         resetPaper() {
             this.paper.project.activeLayer.removeChildren();
-            this.paper.view.draw();
+            //this.paper.view.draw();
         },
         init() {
             console.log('init')
@@ -96,21 +100,24 @@ export default {
         },
         drawShapes(count) {
             var vm = this;
+            
+            for (var m = 0, max = vm.iterations; m < max; m++) {
+                if (vm.matrix.length > 0) {
 
-            if(vm.matrix.length > 0){
-                // var point = new paper.Point(vm.width / vm.points * i, vm.height/2);
+                    // var point = new paper.Point(vm.width / vm.points * i, vm.height/2);
                     var spot = vm.matrix.shift();
                     vm.shapes[vm.i] = new paper.Shape.Rectangle(new paper.Point(spot), new paper.Size(vm.boxSize.x, vm.boxSize.y));
-                    vm.path.add(vm.shapes[vm.i]);
+                    
                     var color = `#${Math.round(vm.rand(7,9))}${Math.round(vm.rand(4,9))}aa11`;
                     vm.shapes[vm.i].strokeColor = color;
                     // vm.shapes[i].fillColor = color;
                     vm.shapes[vm.i].strokeWidth = .1;
-                    vm.shapes[vm.i].opacity = vm.rand(.5,.8);
+                    vm.shapes[vm.i].opacity = vm.rand(.6, .8);
                     // vm.shapes[vm.i].smooth({ type: 'continuous' });
                     // vm.shapes[vm.i].rotate(vm.rand(-1,1));
                     // vm.path.add(vm.shapes[vm.i]);
-                    vm.i +=1;                
+                    vm.i += 1;
+                }
             }
 
         },
@@ -119,15 +126,9 @@ export default {
         },
         onFrame(event) {
             var vm = this;
-            // draw shapes
-            //if (event.count % 2) {
             if (vm.mousing) {
                 vm.drawShapes(event.count);
-
             }
-            //}
-
-
         },
         onResize(event) {
             this.init();
@@ -136,12 +137,22 @@ export default {
             var vm = this;
 
             vm.tool = new paper.Tool();
-            // vm.tool.minDistance = 100;
+            // vm.tool.minDistance = vm.boxSize;
             vm.tool.onMouseMove = (event) => {
                 vm.mousePos = event.point;
+                // for (var i = 0, m = vm.shapes.length; i < m; i++) {
+                //     var c = vm.shapes[i];
+                    var test = vm.layer.hitTest(event.point);
+                    console.log(test);
+                    for(var i=0, c= test.length; i < c; i++) {
+                        test[i].position.x += Math.sin(event.count * 2) * (vm.boxSize.x / 2);
+                        test[i].position.y += Math.cos(event.count * 2) * (vm.boxSize.y / 2);
+                    }
+                    
 
+                // }
             }
-            
+
         }
     }
 }

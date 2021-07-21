@@ -5,6 +5,7 @@
       <router-link to="/shapes">shapes</router-link> |
       <router-link to="/time-shapes">shapes 2</router-link> |
       <router-link to="/boxes">boxes</router-link> |
+      <router-link to="/boxes-2">boxes 2</router-link> |
       <router-link to="/string">string</router-link> |
       <router-link to="/lava">waves</router-link> |
       <router-link to="/scroll">scroll</router-link> |
